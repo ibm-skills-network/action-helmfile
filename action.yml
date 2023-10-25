@@ -34,44 +34,61 @@ inputs:
     default: "0.8.1"
     required: false
 
-runs:
-  using: "composite"
-  steps:
-    - run: |
-        mkdir -p $GITHUB_WORKSPACE/bin
-        echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
-      shell: bash
-    # install helm
-    - run: |
-        wget https://get.helm.sh/helm-v${{ inputs.helm-version }}-linux-amd64.tar.gz -O /tmp/helm.tar.gz \
-            && tar xzf /tmp/helm.tar.gz -C /tmp --strip-components=1 \
-            && mv /tmp/helm $GITHUB_WORKSPACE/bin/helm \
-            && chmod +x $GITHUB_WORKSPACE/bin/helm
-      shell: bash
-    # install helmfile
-    - run: |
-        wget https://github.com/helmfile/helmfile/releases/download/v${{ inputs.helmfile-version }}/helmfile_${{ inputs.helmfile-version }}_linux_amd64.tar.gz -O /tmp/helmfile.tar.gz \
-        && tar xzf /tmp/helmfile.tar.gz -C /tmp \
-        && mv /tmp/helmfile $GITHUB_WORKSPACE/bin/helmfile \
-        && chmod +x $GITHUB_WORKSPACE/bin/helmfile
-      shell: bash
-    # install helm-diff
-    - run: |
-        helm plugin install https://github.com/databus23/helm-diff --version ${{ inputs.helm-diff-version }}
-      shell: bash
-    # install helm-secrets
-    - run: |
-        helm plugin install https://github.com/jkroepke/helm-secrets --version ${{ inputs.helm-secrets-version }}
-      shell: bash
-    # install helm-s3
-    - run: |
-        helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${{ inputs.helm-s3-version }}
-      shell: bash
-    # install helm-git
-    - run: |
-        helm plugin install https://github.com/aslafy-z/helm-git --version ${{ inputs.helm-git-version }}
-      shell: bash
-    # install helm-x
-    - run: |
-        helm plugin install https://github.com/mumoshu/helm-x --version ${{ inputs.helm-x-version }}
-      shell: bash
+jobs:
+  setup-helm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Environment
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Install Helm
+        run: |
+          wget https://get.helm.sh/helm-v${{ inputs.helm-version }}-linux-amd64.tar.gz -O /tmp/helm.tar.gz \
+              && tar xzf /tmp/helm.tar.gz -C /tmp --strip-components=1 \
+              && mv /tmp/helm $GITHUB_WORKSPACE/bin/helm \
+              && chmod +x $GITHUB_WORKSPACE/bin/helm
+        shell: bash
+
+      - name: Install Helmfile
+        run: |
+          wget https://github.com/helmfile/helmfile/releases/download/v${{ inputs.helmfile-version }}/helmfile_${{ inputs.helmfile-version }}_linux_amd64.tar.gz -O /tmp/helmfile.tar.gz \
+          && tar xzf /tmp/helmfile.tar.gz -C /tmp \
+          && mv /tmp/helmfile $GITHUB_WORKSPACE/bin/helmfile \
+          && chmod +x $GITHUB_WORKSPACE/bin/helmfile
+        shell: bash
+
+      - name: Install Helm-diff Plugin
+        run: |
+          helm plugin install https://github.com/databus23/helm-diff --version ${{ inputs.helm-diff-version }}
+        shell: bash
+
+      - name: Install Helm-secrets Plugin
+        run: |
+          helm plugin install https://github.com/jkroepke/helm-secrets --version ${{ inputs.helm-secrets-version }}
+        shell: bash
+
+      - name: Install Helm-s3 Plugin
+        run: |
+          helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${{ inputs.helm-s3-version }}
+        shell: bash
+
+      - name: Install Helm-git Plugin
+        run: |
+          helm plugin install https://github.com/aslafy-z/helm-git --version ${{ inputs.helm-git-version }}
+        shell: bash
+
+      - name: Install Helm-x Plugin
+        run: |
+           helm plugin install https://github.com/mumoshu/helm-x --version ${{ inputs.helm-x-version }}
+        shell: bash
+
+  install-sops:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Sops
+        uses: mdgreenwald/mozilla-sops-action@v1.4.1
+        with:
+          version: "v3.8.0"
