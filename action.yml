@@ -8,7 +8,7 @@ env:
   HELM_VERSION: "3.13.0"
   HELMFILE_VERSION: "0.149.0"
   HELM_DIFF_VERSION: "3.6.0"
-  HELM_SECRETS_VERSIONn: "4.2.1"
+  HELM_SECRETS_VERSION: "4.2.1"
   HELM_S3_VERSION: "0.10.0"
   HELM_GIT_VERSION: "0.10.0"
   HELM_X_VERSION: "0.8.1"
@@ -16,6 +16,7 @@ env:
 
 jobs:
   setup-helm:
+    name: Setup Helm
     runs-on: ubuntu-latest
     steps:
       - name: Set up Environment
@@ -34,7 +35,7 @@ jobs:
 
       - name: Install Helmfile
         run: |
-          wget https://github.com/helmfile/helmfile/releases/download/v$HELMFILE_VERSION/helmfile_$HELMFILE_VERSION}_linux_amd64.tar.gz -O /tmp/helmfile.tar.gz \
+          wget https://github.com/helmfile/helmfile/releases/download/v$HELMFILE_VERSION/helmfile_$HELMFILE_VERSION_linux_amd64.tar.gz -O /tmp/helmfile.tar.gz \
           && tar xzf /tmp/helmfile.tar.gz -C /tmp \
           && mv /tmp/helmfile $GITHUB_WORKSPACE/bin/helmfile \
           && chmod +x $GITHUB_WORKSPACE/bin/helmfile
@@ -66,6 +67,7 @@ jobs:
         shell: bash
 
   install-sops:
+    name: Install Sops
     runs-on: ubuntu-latest
     steps:
       - name: Install Sops
