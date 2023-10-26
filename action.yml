@@ -33,6 +33,10 @@ inputs:
     description: "helm-x plugin version"
     default: "0.8.1"
     required: false
+  sops-version:
+    description: "sops version"
+    default: "3.8.0"
+    required: false
 
 runs:
   using: "composite"
@@ -75,3 +79,7 @@ runs:
     - run: |
         helm plugin install https://github.com/mumoshu/helm-x --version ${{ inputs.helm-x-version }}
       shell: bash
+    - name: Sops Binary Installer
+      uses: mdgreenwald/mozilla-sops-action@v1.4.1
+      with:
+        version: ${{ inputs.sops-version }}
