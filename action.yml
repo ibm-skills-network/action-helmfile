@@ -83,4 +83,3 @@ runs:
       uses: mdgreenwald/mozilla-sops-action@v1.4.1
       with:
         version: ${{ inputs.sops-version }}
-
