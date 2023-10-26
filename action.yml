@@ -4,35 +4,15 @@ branding:
   icon: "cloud"
   color: "blue"
 
-inputs:
-  helm-version:
-    description: "helm version"
-    default: "3.13.0"
-    required: false
-  helmfile-version:
-    description: "helmfile version"
-    default: "0.149.0"
-    required: false
-  helm-diff-version:
-    description: "helm-diff plugin version"
-    default: "3.6.0"
-    required: false
-  helm-secrets-version:
-    description: "helm-secrets plugin version"
-    default: "4.2.1"
-    required: false
-  helm-s3-version:
-    description: "helm-s3 plugin version"
-    default: "0.10.0"
-    required: false
-  helm-git-version:
-    description: "helm-git plugin version"
-    default: "0.10.0"
-    required: false
-  helm-x-version:
-    description: "helm-x plugin version"
-    default: "0.8.1"
-    required: false
+env:
+  HELM_VERSION: "3.13.0"
+  HELMFILE_VERSION: "0.149.0"
+  HELM_DIFF_VERSION: "3.6.0"
+  HELM_SECRETS_VERSIONn: "4.2.1"
+  HELM_S3_VERSION: "0.10.0"
+  HELM_GIT_VERSION: "0.10.0"
+  HELM_X_VERSION: "0.8.1"
+  SOPS_VERSION: "v3.8.0"
 
 jobs:
   setup-helm:
@@ -46,7 +26,7 @@ jobs:
 
       - name: Install Helm
         run: |
-          wget https://get.helm.sh/helm-v${{ inputs.helm-version }}-linux-amd64.tar.gz -O /tmp/helm.tar.gz \
+          wget https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz -O /tmp/helm.tar.gz \
               && tar xzf /tmp/helm.tar.gz -C /tmp --strip-components=1 \
               && mv /tmp/helm $GITHUB_WORKSPACE/bin/helm \
               && chmod +x $GITHUB_WORKSPACE/bin/helm
@@ -54,7 +34,7 @@ jobs:
 
       - name: Install Helmfile
         run: |
-          wget https://github.com/helmfile/helmfile/releases/download/v${{ inputs.helmfile-version }}/helmfile_${{ inputs.helmfile-version }}_linux_amd64.tar.gz -O /tmp/helmfile.tar.gz \
+          wget https://github.com/helmfile/helmfile/releases/download/v$HELMFILE_VERSION/helmfile_$HELMFILE_VERSION}_linux_amd64.tar.gz -O /tmp/helmfile.tar.gz \
           && tar xzf /tmp/helmfile.tar.gz -C /tmp \
           && mv /tmp/helmfile $GITHUB_WORKSPACE/bin/helmfile \
           && chmod +x $GITHUB_WORKSPACE/bin/helmfile
@@ -62,27 +42,27 @@ jobs:
 
       - name: Install Helm-diff Plugin
         run: |
-          helm plugin install https://github.com/databus23/helm-diff --version ${{ inputs.helm-diff-version }}
+          helm plugin install https://github.com/databus23/helm-diff --version $HELM_DIFF_VERSION
         shell: bash
 
       - name: Install Helm-secrets Plugin
         run: |
-          helm plugin install https://github.com/jkroepke/helm-secrets --version ${{ inputs.helm-secrets-version }}
+          helm plugin install https://github.com/jkroepke/helm-secrets --version $HELM_SECRETS_VERSION
         shell: bash
 
       - name: Install Helm-s3 Plugin
         run: |
-          helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${{ inputs.helm-s3-version }}
+          helm plugin install https://github.com/hypnoglow/helm-s3.git --version $HELM_S3_VERSION
         shell: bash
 
       - name: Install Helm-git Plugin
         run: |
-          helm plugin install https://github.com/aslafy-z/helm-git --version ${{ inputs.helm-git-version }}
+          helm plugin install https://github.com/aslafy-z/helm-git --version $HELM_GIT_VERSION
         shell: bash
 
       - name: Install Helm-x Plugin
         run: |
-           helm plugin install https://github.com/mumoshu/helm-x --version ${{ inputs.helm-x-version }}
+           helm plugin install https://github.com/mumoshu/helm-x --version $HELM_X_VERSION
         shell: bash
 
   install-sops:
@@ -91,4 +71,4 @@ jobs:
       - name: Install Sops
         uses: mdgreenwald/mozilla-sops-action@v1.4.1
         with:
-          version: "v3.8.0"
+          version: $SOPS_VERSION
