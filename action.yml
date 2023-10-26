@@ -1,5 +1,8 @@
 name: "Configure helmfile Action For GitHub Actions"
 description: "Configure helmfile and many helm plugins in GitHub Actions"
+branding:
+  icon: "cloud"
+  color: "blue"
 
 inputs:
   helm-version:
