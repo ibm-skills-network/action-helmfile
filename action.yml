@@ -80,6 +80,6 @@ runs:
         helm plugin install https://github.com/mumoshu/helm-x --version ${{ inputs.helm-x-version }}
       shell: bash
     - name: Sops Binary Installer
-      uses: mdgreenwald/mozilla-sops-action@v1.4.1
+      uses: mdgreenwald/mozilla-sops-action@v1
       with:
         version: ${{ inputs.sops-version }}
