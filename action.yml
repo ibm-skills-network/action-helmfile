@@ -37,6 +37,10 @@ inputs:
     description: "sops version"
     default: "3.8.0"
     required: false
+  ibmc-version:
+    description: "ibmc version"
+    default: "2.2.33"
+    required: false
 
 runs:
   using: "composite"
@@ -83,3 +87,13 @@ runs:
       uses: mdgreenwald/mozilla-sops-action@v1
       with:
         version: ${{ inputs.sops-version }}
+    - name: Install Helm IBMC
+      run: |
+        helm repo add ibm-helm https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm \
+        && helm repo update \
+        && helm plugin uninstall ibmc \
+        && helm fetch --untar ibm-helm/ibm-object-storage-plugin --version ${{ inputs.ibmc-version }} \
+        && helm plugin install ./ibm-object-storage-plugin/helm-ibmc \
+        && rm -rf ./ibm-object-storage-plugin \
+        && helm ibmc --help
+
