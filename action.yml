@@ -93,6 +93,7 @@ runs:
         && helm repo update \
         && helm fetch --untar ibm-helm/ibm-object-storage-plugin --version ${{ inputs.ibmc-version }} \
         && helm plugin install ./ibm-object-storage-plugin/helm-ibmc \
+        && chmod 755 $(helm env HELM_PLUGINS)/helm-ibmc/ibmc.sh \
         && helm ibmc --help
       shell: bash
 
