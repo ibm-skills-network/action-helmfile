@@ -93,7 +93,6 @@ runs:
         && helm repo update \
         && helm fetch --untar ibm-helm/ibm-object-storage-plugin --version ${{ inputs.ibmc-version }} \
         && helm plugin install ./ibm-object-storage-plugin/helm-ibmc \
-        && rm -rf ./ibm-object-storage-plugin \
         && helm ibmc --help
       shell: bash
 

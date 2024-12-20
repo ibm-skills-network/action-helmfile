@@ -1,0 +1,71 @@
+replicaCount: 1
+maxUnavailableNodeCount: 1
+
+# Change license to true to indicate have read and agreed to license agreement
+# https://www.apache.org/licenses/LICENSE-2.0
+license: false
+
+image:
+  providerImage:
+    # This image is required only for IBM Cloud clusters
+    ibmContainerRegistry: icr.io/ibm/ibmcloud-provider-storage:1.30.31
+  pluginImage:
+    ibmContainerRegistry: icr.io/ibm/ibmcloud-object-storage-plugin@sha256:6a4a874ff48a8aaa02f4ebda2cccf39d85def4a87821e59fbb8b145206cb5235
+    publicRegistry: icr.io/cpopen/ibmcloud-object-storage-plugin@sha256:6a4a874ff48a8aaa02f4ebda2cccf39d85def4a87821e59fbb8b145206cb5235
+  driverImage:
+    ibmContainerRegistry: icr.io/ibm/ibmcloud-object-storage-driver@sha256:c3bbfb5f3805ed0aada57eb684af9d9e4a22c6c072b24ce80249f035d5f0f284
+    publicRegistry: icr.io/cpopen/ibmcloud-object-storage-driver@sha256:c3bbfb5f3805ed0aada57eb684af9d9e4a22c6c072b24ce80249f035d5f0f284
+  pullPolicy: IfNotPresent
+
+# IAM endpoint url
+iamEndpoint: https://iam.cloud.ibm.com
+iamEndpointVPC: https://private.iam.cloud.ibm.com
+
+# IBMC || IBMC-VPC || RHOCP || SATELLITE
+provider: RHOCP
+
+# Container platform [ K8S vs OpenShift ]
+platform: OpenShift
+
+# Datacenter name where cluster is deployed (required only for IKS)
+dcname: ""
+region: ""
+# Worker node's OS [ redhat || debian ]
+workerOS: redhat
+
+# COS endpoints and COS storageClass configuration
+# For satellite clusters, to use aws, wasabi or ibm object storage, please provide the s3Provider(aws/wasabi/ibm) and respective storageClass(region) values.
+# If user provides all 3 values endpoint, storageClass and s3Provider, precedence is given to storageClass and s3Provider.
+# To input endpoint explicitly, input only endpoint and storageClass and skip s3Provider.
+# For non-satellite rhocp clusters, please provide cos endpoint and cos storageclass.
+
+cos:
+  # The s3 endpoint url for the targeted object storage service; format - https://<Endpoint URL>
+  endpoint: "NA"
+  # The region in which the bucket has to be created as per the object storage service provider, ex - us-south
+  storageClass: ""
+  # Supported object storage service providers are aws, ibm, wasabi
+  s3Provider: ""
+
+secondaryValueFile: ibm/values.yaml
+secondaryValueFileSat: satellite/values.yaml
+
+arch: amd64
+
+resource:
+  memory: 500Mi
+  cpu: 500m
+  ephemeralStorageReq: 5Mi
+  ephemeralStorageLimit: 105Mi
+
+# /etc/kubernetes for RHOCP else /usr/libexec/kubernetes
+kubeDriver: /usr/libexec/kubernetes
+
+bucketAccessPolicy: false
+
+quotaLimit: false
+
+allowCrossNsSecret: true
+
+# current and previous
+s3fsVersion: current
