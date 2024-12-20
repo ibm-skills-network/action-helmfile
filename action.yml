@@ -96,4 +96,5 @@ runs:
         && helm plugin install ./ibm-object-storage-plugin/helm-ibmc \
         && rm -rf ./ibm-object-storage-plugin \
         && helm ibmc --help
+      shell: bash
 
