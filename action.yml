@@ -91,7 +91,6 @@ runs:
       run: |
         helm repo add ibm-helm https://raw.githubusercontent.com/IBM/charts/master/repo/ibm-helm \
         && helm repo update \
-        && helm plugin uninstall ibmc \
         && helm fetch --untar ibm-helm/ibm-object-storage-plugin --version ${{ inputs.ibmc-version }} \
         && helm plugin install ./ibm-object-storage-plugin/helm-ibmc \
         && rm -rf ./ibm-object-storage-plugin \
